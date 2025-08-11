@@ -1,9 +1,4 @@
-red = 4
-print(red)
-
-
-import numpy as np
-
-rand = np.random.random()
-
-print(rand)
+import torch_scatter
+import torch_sparse
+import torch_cluster
+import torch_spline_conv
