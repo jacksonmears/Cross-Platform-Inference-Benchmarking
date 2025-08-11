@@ -10,7 +10,9 @@ from training_model.GNN_autoencoder_model import GNNAutoencoder
 
 # ----------------- CONFIG -----------------
 CHECKPOINT = "../model/gnn_autoencoder.pth"
-INPUT_GLOB = "../synthetic_scans/000001.xyz_occlusionplane_1.xyz"
+INPUT_GLOB = "../synthetic_scans/000001.xyz_"
+INPUT_GLOB_SUFFIX = ["noise", "globaldropout", "localhole", "occlusionplane"]
+END = "_1.xyz"
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 # ------------------------------------------
 
@@ -78,9 +80,13 @@ def run_inference_on_file(model, path, device):
 
 if __name__ == "__main__":
     model = load_checkpoint(CHECKPOINT, DEVICE)
-    files = sorted(glob.glob(INPUT_GLOB))
-    if not files:
-        print("No files found for pattern:", INPUT_GLOB)
-    for i, fpath in enumerate(files[:5]):
-        print(f"\n---- File {i+1}: {fpath} ----")
-        run_inference_on_file(model, fpath, DEVICE)
+
+    for suffix in INPUT_GLOB_SUFFIX:
+        pattern = INPUT_GLOB+suffix+END
+        files = sorted(glob.glob(pattern))
+
+        if not files:
+            print("No files found for pattern:", pattern)
+        for i, fpath in enumerate(files[:5]):
+            print(f"\n---- File {i+1}: {fpath} ----")
+            run_inference_on_file(model, fpath, DEVICE)

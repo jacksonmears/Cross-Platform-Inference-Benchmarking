@@ -6,7 +6,7 @@ def load_xyz_file(filepath):
     return np.loadtxt(filepath, delimiter=None)
 
 
-original_folder = "../original-hallucinations"
+original_folder = "../original_scans"
 synthetic_folder = "../synthetic_scans"
 
 original_dict = {f: load_xyz_file(os.path.join(original_folder, f)) for f in os.listdir(original_folder)}
