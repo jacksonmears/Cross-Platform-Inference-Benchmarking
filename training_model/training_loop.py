@@ -1,12 +1,9 @@
-import torch
-from GNN_autoencoder_model import *
-from chamfer import *
 from main import *
 
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-model = GNNAutoencoder(k=16, num_points=1024).to(device)
+model = GNNAutoencoder().to(device)
 optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
 
 for epoch in range(100):

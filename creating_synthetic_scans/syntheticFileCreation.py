@@ -40,10 +40,10 @@ def process_all_scans(input_folder, output_folder):
 
 
 if __name__ == "__main__":
-    input_folder = "../original-scans"
-    output_folder = "../synthetic-scans"
+    input_folder = "../original-hallucinations"
+    output_folder = "../synthetic_scans"
     process_all_scans(input_folder, output_folder)
-    print("All scans processed and synthetic data saved.")
+    print("All hallucinations processed and synthetic data saved.")
 
 
 

@@ -1,9 +1,10 @@
-import torch.nn.functional as F
 from torch_geometric.nn import EdgeConv, global_max_pool
 from torch import nn
+from config import NUM_POINTS
+
 
 class GNNEncoder(nn.Module):
-    def __init__(self, k=16):
+    def __init__(self):
         super().__init__()
         # EdgeConv layers
         self.conv1 = EdgeConv(nn.Sequential(nn.Linear(6, 64), nn.ReLU(), nn.Linear(64, 64)))
@@ -24,13 +25,13 @@ class GNNEncoder(nn.Module):
 
 
 class GNNDecoder(nn.Module):
-    def __init__(self, num_points=1024):
+    def __init__(self):
         super().__init__()
-        self.num_points = num_points
+        self.num_points = NUM_POINTS
         self.fc = nn.Sequential(
             nn.Linear(128, 256),
             nn.ReLU(),
-            nn.Linear(256, num_points * 3)  # reconstruct xyz of all points
+            nn.Linear(256, NUM_POINTS * 3)  # reconstruct xyz of all points
         )
 
     def forward(self, z):
@@ -40,10 +41,10 @@ class GNNDecoder(nn.Module):
 
 
 class GNNAutoencoder(nn.Module):
-    def __init__(self, k=16, num_points=1024):
+    def __init__(self):
         super().__init__()
-        self.encoder = GNNEncoder(k)
-        self.decoder = GNNDecoder(num_points)
+        self.encoder = GNNEncoder()
+        self.decoder = GNNDecoder()
 
     def forward(self, data):
         x, edge_index, batch = data.x, data.edge_index, data.batch

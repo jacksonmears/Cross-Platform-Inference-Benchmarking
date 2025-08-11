@@ -5,11 +5,11 @@ from GNN_autoencoder_model import GNNAutoencoder
 from chamfer import chamfer_distance
 from fetching_files import original_points_list, synthetic_points_list
 
-dataset = PointCloudDataset(original_points_list, synthetic_points_list, k=8) # originally 16 but downsampled because memeory couldn't handle 16
-train_loader = DataLoader(dataset, batch_size=4, shuffle=True)
+dataset = PointCloudDataset(original_points_list, synthetic_points_list) # originally 16 but downsampled because memeory couldn't handle 16
+train_loader = DataLoader(dataset, batch_size=1, shuffle=True) # originally batch_size=4 but again downsampling to fit with memory constraints
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-model = GNNAutoencoder(k=16, num_points=1024).to(device)
+model = GNNAutoencoder().to(device)
 optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
 
 save_path = '../model/gnn_autoencoder.pth'

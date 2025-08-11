@@ -1,0 +1,86 @@
+import glob
+import os
+import numpy as np
+import torch
+from training_model.config import K, NUM_POINTS
+
+# import your model class & graph creator
+from training_model.create_graphs import create_graph_from_point_cloud
+from training_model.GNN_autoencoder_model import GNNAutoencoder
+
+# ----------------- CONFIG -----------------
+CHECKPOINT = "../model/gnn_autoencoder.pth"
+INPUT_GLOB = "../synthetic_scans/000001.xyz_localhole_1.xyz"
+DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+# ------------------------------------------
+
+
+def load_checkpoint(path, device):
+    ckpt = torch.load(path, map_location=device)
+    model = GNNAutoencoder()
+    model.load_state_dict(ckpt['model_state_dict'])
+    model.to(device).eval()
+    print("Loaded checkpoint: epoch", ckpt.get('epoch'), "loss", ckpt.get('loss'))
+    return model
+
+def load_points_np(path):
+    # Just use numpy to load points (assumes space-delimited xyz)
+    pts = np.loadtxt(path, delimiter=None).astype(np.float32)
+    return pts
+
+def fixed_size_points_np(points, num_points=NUM_POINTS):
+    n = points.shape[0]
+    if n == num_points:
+        return points.copy()
+    if n > num_points:
+        idx = np.random.choice(n, num_points, replace=False)
+        return points[idx]
+    # pad by repeating last point
+    pad = np.repeat(points[-1:], num_points - n, axis=0)
+    return np.vstack([points, pad])
+
+def make_data_from_np(points_np):
+    import torch
+    N = points_np.shape[0]
+    k_effective = min(K, max(1, N-1))
+    x = torch.from_numpy(points_np).float()
+    data = create_graph_from_point_cloud(x, k=k_effective)
+    data.batch = torch.zeros(data.x.size(0), dtype=torch.long)
+    return data
+
+def save_points_np(path, points_np):
+    # Save as xyz plain text
+    np.savetxt(path, points_np, fmt="%.6f")
+
+def run_inference_on_file(model, path, device):
+    pts = load_points_np(path)
+    input_pts = fixed_size_points_np(pts, NUM_POINTS)
+    data = make_data_from_np(input_pts)
+    data = data.to(device)
+    with torch.no_grad():
+        out = model(data)
+    out_np = out.cpu().numpy()
+    if out_np.ndim == 3:
+        out_np = out_np[0]
+
+    # Prepare output directory
+    output_dir = os.path.join("hallucinations")
+    os.makedirs(output_dir, exist_ok=True)
+
+    # Build output path
+    filename = os.path.basename(path)
+    base_name = os.path.splitext(filename)[0]
+    recon_path = os.path.join(output_dir, base_name + "_recon.xyz")
+
+    save_points_np(recon_path, out_np)
+    print("Saved reconstruction to:", recon_path)
+
+
+if __name__ == "__main__":
+    model = load_checkpoint(CHECKPOINT, DEVICE)
+    files = sorted(glob.glob(INPUT_GLOB))
+    if not files:
+        print("No files found for pattern:", INPUT_GLOB)
+    for i, fpath in enumerate(files[:5]):
+        print(f"\n---- File {i+1}: {fpath} ----")
+        run_inference_on_file(model, fpath, DEVICE)
