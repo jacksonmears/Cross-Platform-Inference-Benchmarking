@@ -1,6 +1,6 @@
 from torch_geometric.nn import EdgeConv, global_max_pool
 from torch import nn
-from config import NUM_POINTS
+from training_model.config import NUM_POINTS
 
 
 class GNNEncoder(nn.Module):

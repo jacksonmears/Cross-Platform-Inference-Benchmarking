@@ -10,7 +10,7 @@ from training_model.GNN_autoencoder_model import GNNAutoencoder
 
 # ----------------- CONFIG -----------------
 CHECKPOINT = "../model/gnn_autoencoder.pth"
-INPUT_GLOB = "../synthetic_scans/000001.xyz_localhole_1.xyz"
+INPUT_GLOB = "../synthetic_scans/000001.xyz_occlusionplane_1.xyz"
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 # ------------------------------------------
 
