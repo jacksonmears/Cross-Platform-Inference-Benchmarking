@@ -11,19 +11,23 @@ def generate_synthetic_scans(original_points, base_filename, save_dir, number_fi
     print(base_filename, save_dir)
 
     for i in range(number_files):
+        print("localhole #", i)
         corrupted = random_local_hole(original_points, radius=0.5, num_holes=3)
         save_points_as_xyz(corrupted, os.path.join(save_dir, f"{base_filename}_localhole_{i+1}.xyz"))
 
     for i in range(number_files):
+        print("globaldroupout #", i)
         dropout_ratio = np.random.uniform(0.05, 0.2)
         corrupted = random_global_dropout(original_points, dropout_ratio=dropout_ratio)
         save_points_as_xyz(corrupted, os.path.join(save_dir, f"{base_filename}_globaldropout_{i+1}.xyz"))
 
     for i in range(number_files):
+        print("occlusionplane #", i)
         corrupted = occlusion_plane(original_points)
         save_points_as_xyz(corrupted, os.path.join(save_dir, f"{base_filename}_occlusionplane_{i+1}.xyz"))
 
     for i in range(number_files):
+        print("noise #", i)
         noise_std = np.random.uniform(0.005, 0.02)
         corrupted = add_noise(original_points, noise_std=noise_std)
         save_points_as_xyz(corrupted, os.path.join(save_dir, f"{base_filename}_noise_{i+1}.xyz"))
@@ -40,7 +44,7 @@ def process_all_scans(input_folder, output_folder):
 
 
 if __name__ == "__main__":
-    input_folder = "../original-hallucinations"
+    input_folder = "../original_scans"
     output_folder = "../synthetic_scans"
     process_all_scans(input_folder, output_folder)
     print("All hallucinations processed and synthetic data saved.")
