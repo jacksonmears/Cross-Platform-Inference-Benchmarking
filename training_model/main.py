@@ -54,7 +54,7 @@ def main():
     best_loss = fetch_best_loss()
     loss_threshold = 0.1
 
-    # Ask user if they want to resume training if checkpoint exists
+    # ask user if they want to resume training if checkpoint exists
     user_input = input(f"Checkpoint found with best loss {best_loss:.5f}. Resume training? (y/n): ").strip().lower()
     if os.path.exists(save_path) and user_input == 'y':
         start_epoch, best_loss = load_checkpoint(model, optimizer, save_path)

@@ -4,18 +4,15 @@ import numpy as np
 import torch
 from training_model.config import K, NUM_POINTS
 
-# import your model class & graph creator
 from training_model.create_graphs import create_graph_from_point_cloud
 from training_model.GNN_autoencoder_model import GNNAutoencoder
 
-# ----------------- CONFIG -----------------
 CHECKPOINT = "../model/gnn_autoencoder.pth"
 INPUT_GLOB = "../synthetic_scans/000006.xyz_"
 INPUT_GLOB_SUFFIX = ["noise", "globaldropout", "localhole", "occlusionplane"]
 END = "_1.xyz"
 # INPUT_GLOB = "C:/Users/jacks/PycharmProjects/GreenReader//test_space.xyz"
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-# ------------------------------------------
 
 
 def load_checkpoint(path, device):
@@ -50,7 +47,6 @@ def make_data_from_np(points_np):
     return data
 
 def save_points_np(path, points_np):
-    # Save as xyz plain text
     np.savetxt(path, points_np, fmt="%.6f")
 
 def run_inference_on_file(model, path, device):
@@ -64,11 +60,9 @@ def run_inference_on_file(model, path, device):
     if out_np.ndim == 3:
         out_np = out_np[0]
 
-    # Prepare output directory
     output_dir = os.path.join("inpainting")
     os.makedirs(output_dir, exist_ok=True)
 
-    # Build output path
     filename = os.path.basename(path)
     base_name = os.path.splitext(filename)[0]
     recon_path = os.path.join(output_dir, base_name + "_recon.xyz")
