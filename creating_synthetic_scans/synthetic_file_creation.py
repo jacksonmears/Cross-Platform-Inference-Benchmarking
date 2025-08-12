@@ -1,5 +1,4 @@
 import os
-import numpy as np
 from functions import *
 
 def save_points_as_xyz(points, filename):
@@ -47,7 +46,7 @@ if __name__ == "__main__":
     input_folder = "../original_scans"
     output_folder = "../synthetic_scans"
     process_all_scans(input_folder, output_folder)
-    print("All hallucinations processed and synthetic data saved.")
+    print("All inpainting processed and synthetic data saved.")
 
 
 

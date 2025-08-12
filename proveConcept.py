@@ -1,7 +1,7 @@
 import open3d as o3d
 import os
 
-# folder_path = "original-hallucinations"
+# folder_path = "original-inpainting"
 #
 # files = [file for file in os.listdir(folder_path)]
 #

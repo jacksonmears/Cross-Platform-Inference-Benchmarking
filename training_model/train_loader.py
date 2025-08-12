@@ -13,16 +13,13 @@ class PointCloudDataset(torch.utils.data.Dataset):
         return len(self.original_points_list)
 
     def __getitem__(self, idx):
-        # Convert synthetic partial scan to graph
         input_points = torch.tensor(self.synthetic_points_list[idx], dtype=torch.float)
         input_points = fixed_size_points(input_points)  # reduce first to save memory!
         input_graph = create_graph_from_point_cloud(input_points)
 
-        # Target original points (pad or sample to fixed size)
         target_points = torch.tensor(self.original_points_list[idx], dtype=torch.float)
         target_points = fixed_size_points(target_points)
 
-        # For batch processing, add dummy batch vector (all zeros for single graph)
         input_graph.batch = torch.zeros(input_graph.x.size(0), dtype=torch.long)
 
         return input_graph, target_points

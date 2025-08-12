@@ -16,7 +16,6 @@ for epoch in range(100):
         optimizer.zero_grad()
         output_points = model(input_graph)
 
-        # Chamfer loss expects [B, N, 3] tensors
         loss, _ = chamfer_distance(output_points, target_points)
         loss.backward()
         optimizer.step()

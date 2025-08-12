@@ -27,7 +27,6 @@ def load_checkpoint(path, device):
     return model
 
 def load_points_np(path):
-    # Just use numpy to load points (assumes space-delimited xyz)
     pts = np.loadtxt(path, delimiter=None).astype(np.float32)
     return pts
 
@@ -38,7 +37,6 @@ def fixed_size_points_np(points, num_points=NUM_POINTS):
     if n > num_points:
         idx = np.random.choice(n, num_points, replace=False)
         return points[idx]
-    # pad by repeating last point
     pad = np.repeat(points[-1:], num_points - n, axis=0)
     return np.vstack([points, pad])
 
@@ -67,7 +65,7 @@ def run_inference_on_file(model, path, device):
         out_np = out_np[0]
 
     # Prepare output directory
-    output_dir = os.path.join("hallucinations")
+    output_dir = os.path.join("inpainting")
     os.makedirs(output_dir, exist_ok=True)
 
     # Build output path
