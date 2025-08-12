@@ -18,7 +18,6 @@ class GNNEncoder(nn.Module):
         x2 = self.conv2(x1, edge_index)
         x3 = self.conv3(x2, edge_index)
 
-        # Global pooling to get a fixed-length embedding per graph
         x_pool = global_max_pool(x3, batch)
         embedding = self.fc(x_pool)
         return embedding
@@ -31,12 +30,12 @@ class GNNDecoder(nn.Module):
         self.fc = nn.Sequential(
             nn.Linear(128, 256),
             nn.ReLU(),
-            nn.Linear(256, NUM_POINTS * 3)  # reconstruct xyz of all points
+            nn.Linear(256, NUM_POINTS * 3)
         )
 
     def forward(self, z):
         out = self.fc(z)
-        out = out.view(-1, self.num_points, 3)  # batch_size x num_points x 3
+        out = out.view(-1, self.num_points, 3)
         return out
 
 
