@@ -3,17 +3,11 @@ from torch_geometric.data import Data
 from training_model.config import K
 
 
-def create_graph_from_point_cloud(points, k=K):  # oringally 16 !!!
-    """
-    points: torch.Tensor of shape [N, 3] (xyz coordinates)
-    k: number of neighbors for edges
-    """
-    # Build edge_index with k-NN
+def create_graph_from_point_cloud(points, k=K):
     edge_index = knn_graph(points, k, loop=False)  # [2, num_edges]
 
-    # Node features can just be the xyz coords here (or add reflectance if you want)
-    x = points
+    x = points  # technically redundant code but important to understand
+                # and emphasize what x's role is
 
-    # Create PyG graph data object
     data = Data(x=x, edge_index=edge_index)
     return data
