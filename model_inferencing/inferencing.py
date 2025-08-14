@@ -5,10 +5,10 @@ import torch
 from training_model.config import K, NUM_POINTS
 
 from training_model.create_graphs import create_graph_from_point_cloud
-from training_model.GNN_autoencoder_model import GNNAutoencoder
+from model.GNN_autoencoder_model import GNNAutoencoder
 
 CHECKPOINT = "../model/gnn_autoencoder.pth"
-INPUT_GLOB = "../synthetic_scans/000006.xyz_"
+INPUT_GLOB = "../synthetic_scans/000006.xyz"
 INPUT_GLOB_SUFFIX = ["noise", "globaldropout", "localhole", "occlusionplane"]
 END = "_1.xyz"
 # INPUT_GLOB = "C:/Users/jacks/PycharmProjects/GreenReader//test_space.xyz"

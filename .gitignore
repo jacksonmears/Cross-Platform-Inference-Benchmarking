@@ -1,3 +1,4 @@
 synthetic_scans/
 model/gnn_autoencoder.pth
 model_inferencing/inpainting/
+runtime_analysis/

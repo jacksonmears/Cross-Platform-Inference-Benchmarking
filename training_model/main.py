@@ -1,7 +1,7 @@
 import torch
 from train_loader import PointCloudDataset
 from torch_geometric.loader import DataLoader
-from GNN_autoencoder_model import GNNAutoencoder
+from model.GNN_autoencoder_model import GNNAutoencoder
 from chamfer import chamfer_distance
 from fetching_files import original_points_list, synthetic_points_list
 import os
