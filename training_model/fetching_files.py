@@ -8,15 +8,24 @@ def load_xyz_file(filepath):
 
 original_folder = "../original_scans"
 synthetic_folder = "../synthetic_scans"
+mask_folder = "../masks"
 
 original_dict = {f: load_xyz_file(os.path.join(original_folder, f)) for f in os.listdir(original_folder)}
 
 original_points_list = []
 synthetic_points_list = []
+mask_points_list = []
 
 for syn_file in os.listdir(synthetic_folder):
     print(syn_file)
     base_original_name = syn_file.split('_')[0]
+
     if base_original_name in original_dict:
         synthetic_points_list.append(load_xyz_file(os.path.join(synthetic_folder, syn_file)))
         original_points_list.append(original_dict[base_original_name])
+
+        mask_file = os.path.join(mask_folder, syn_file.replace('.xyz', '_mask.npy'))
+        if os.path.exists(mask_file):
+            mask_points_list.append(np.load(mask_file))
+        else:
+            mask_points_list.append(np.zeros(len(original_dict[base_original_name]), dtype=bool))

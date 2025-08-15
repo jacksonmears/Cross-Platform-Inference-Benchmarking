@@ -1,5 +1,6 @@
 synthetic_scans/
 model/gnn_autoencoder.pth
 model_inferencing/inpainting/
-runtime_analysis/*
-!runtime_analysis/.gitkeep
+runtime_analysis/
+masks/
+original_scans/

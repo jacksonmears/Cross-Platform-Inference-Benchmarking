@@ -2,9 +2,9 @@ import torch
 from train_loader import PointCloudDataset
 from torch_geometric.loader import DataLoader
 from model.GNN_autoencoder_model import GNNAutoencoder
-from chamfer import chamfer_distance
 from fetching_files import original_points_list, synthetic_points_list
 import os
+from loss.inpainting_loss import inpainting_loss
 
 # CLEAR overfitting right now omg we NEED WAY more sample data and maybe less synthetic scans per original.
 # it looks like all model scans are coming out almost identical to the GT
@@ -67,14 +67,23 @@ def main():
     for epoch in range(start_epoch, start_epoch+TOTAL_NEW_EPOCHS):
         model.train()
         total_loss = 0
-        for input_graph, target_points in train_loader:
+        for input_graph, target_points, mask in train_loader:
             input_graph = input_graph.to(device)
             target_points = target_points.to(device).float()
+            mask = mask.to(device)
 
             optimizer.zero_grad()
             output_points = model(input_graph)
 
-            loss = chamfer_distance(output_points, target_points)
+            loss = inpainting_loss(
+                pred=output_points,
+                gt=target_points,
+                mask=mask,
+                lambda_cd=1.0,
+                lambda_emd=0.1,
+                lambda_lap=0.01
+            )
+
             loss.backward()
             optimizer.step()
             total_loss += loss.item()
