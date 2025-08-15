@@ -2,11 +2,11 @@ import torch
 from train_loader import PointCloudDataset
 from torch_geometric.loader import DataLoader
 from model.GNN_autoencoder_model import GNNAutoencoder
-from fetching_files import original_points_list, synthetic_points_list
+from fetching_files import ground_points_list, synthetic_points_list, mask_points_list
 import os
 from loss.inpainting_loss import inpainting_loss
 
-# CLEAR overfitting right now omg we NEED WAY more sample data and maybe less synthetic scans per original.
+# CLEAR overfitting right now omg we NEED WAY more sample data and maybe less synthetic scans per ground truth.
 # it looks like all model scans are coming out almost identical to the GT
 # which would be sweet if I wasn't 100% it should be impossible
 # given the alterations we made while creating the synthetic scans
@@ -14,7 +14,7 @@ from loss.inpainting_loss import inpainting_loss
 best_loss_file = "best_loss.txt"
 save_path = '../model/gnn_autoencoder.pth'
 
-dataset = PointCloudDataset(original_points_list, synthetic_points_list)
+dataset = PointCloudDataset(ground_points_list, synthetic_points_list, mask_points_list)
 train_loader = DataLoader(dataset, batch_size=1, shuffle=True)
 
 TOTAL_NEW_EPOCHS = 100

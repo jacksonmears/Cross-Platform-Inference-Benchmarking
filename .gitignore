@@ -3,4 +3,4 @@ model/gnn_autoencoder.pth
 model_inferencing/inpainting/
 runtime_analysis/
 masks/
-original_scans/
+ground_truths/
