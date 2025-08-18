@@ -1,4 +1,10 @@
-import torch_scatter
-import torch_sparse
-import torch_cluster
-import torch_spline_conv
+
+
+import os
+
+
+path = "ground_truths"
+
+files = [file for file in os.listdir(path) if file[-1]=='z']
+
+print(files[-1])

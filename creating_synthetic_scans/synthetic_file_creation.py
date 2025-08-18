@@ -8,7 +8,7 @@ import numpy as np
 def save_points_as_xyz(points, filename):
     np.savetxt(filename, points, delimiter=' ', fmt='%.6f')
 
-def save_mask(filename, mask):
+def save_mask(mask, filename):
     np.save(filename, mask)
 
 def generate_synthetic_scans(ground_truth_points, base_filename, corrupt_dir, mask_dir, number_files):
@@ -36,7 +36,7 @@ def generate_synthetic_scans(ground_truth_points, base_filename, corrupt_dir, ma
         save_points_as_xyz(corrupted, os.path.join(corrupt_dir, f"{base_filename}_occlusionplane_{i+1}.xyz"))
         save_mask(mask, os.path.join(mask_dir, f"{base_filename}_occlusionplane_{i + 1}_mask.npy"))
 
-    for i in range(number_files):
+    for i in range(number_files+1):
         print("noise #", i)
         noise_std = np.random.uniform(0.005, 0.02)
         corrupted, mask = add_noise(ground_truth_points, noise_std=noise_std)
@@ -45,12 +45,13 @@ def generate_synthetic_scans(ground_truth_points, base_filename, corrupt_dir, ma
 
 def process_all_scans(input_folder, output_folder, masked_folder):
     os.makedirs(output_folder, exist_ok=True)
+    files = [file for file in os.listdir(input_folder) if file[-1]=='z']
 
-    for filename in os.listdir(input_folder):
-        print(f"Processing {filename}...")
-        filepath = os.path.join(input_folder, filename)
+    for file in files:
+        print(f"Processing {file}...")
+        filepath = os.path.join(input_folder, file)
         points = np.loadtxt(filepath, delimiter=None)
-        generate_synthetic_scans(points, filename, output_folder, masked_folder, 10)
+        generate_synthetic_scans(points, file, output_folder, masked_folder, 3)
 
 
 if __name__ == "__main__":

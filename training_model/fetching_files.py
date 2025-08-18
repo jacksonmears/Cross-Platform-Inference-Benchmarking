@@ -10,7 +10,7 @@ ground_truths_folder = "../ground_truths"
 synthetic_folder = "../synthetic_scans"
 mask_folder = "../masks"
 
-ground_dict = {f: load_xyz_file(os.path.join(ground_truths_folder, f)) for f in os.listdir(ground_truths_folder)}
+ground_dict = {f: load_xyz_file(os.path.join(ground_truths_folder, f)) for f in os.listdir(ground_truths_folder) if f[-1]=='z'}
 
 ground_points_list = []
 synthetic_points_list = []

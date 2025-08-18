@@ -10,6 +10,8 @@ def random_local_hole(points, radius=0.5, num_holes=1):
         distances = np.linalg.norm(points - center, axis=1)
         hole_mask = distances <= radius  # points inside the hole
         mask[hole_mask] = True          # mark these points as corrupted
-        points = points[~hole_mask]     # remove points inside the hole
+        # DON'T remove points from 'points' here
 
-    return points, mask
+    corrupted_points = points[~mask]  # remove all masked points at the end
+    return corrupted_points, mask
+
