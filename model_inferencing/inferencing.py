@@ -8,9 +8,9 @@ from training_model.create_graphs import create_graph_from_point_cloud
 from model.GNN_autoencoder_model import GNNAutoencoder
 
 CHECKPOINT = "../model/gnn_autoencoder.pth"
-INPUT_GLOB = "../synthetic_scans/000006.xyz"
-INPUT_GLOB_SUFFIX = ["noise", "globaldropout", "localhole", "occlusionplane"]
-END = "_1.xyz"
+# INPUT_GLOB = "../synthetic_scans/000006.xyz"
+# INPUT_GLOB_SUFFIX = ["noise", "globaldropout", "localhole", "occlusionplane"]
+# END = "_1.xyz"
 # INPUT_GLOB = "C:/Users/jacks/PycharmProjects/GreenReader//test_space.xyz"
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -74,16 +74,23 @@ def run_inference_on_file(model, path, device):
 if __name__ == "__main__":
     model = load_checkpoint(CHECKPOINT, DEVICE)
 
-    for suffix in INPUT_GLOB_SUFFIX:
-        pattern = INPUT_GLOB+suffix+END
-        files = sorted(glob.glob(pattern))
+    # for suffix in INPUT_GLOB_SUFFIX:
+    #     pattern = INPUT_GLOB+suffix+END
+    #     files = sorted(glob.glob(pattern))
+    #
+    #     if not files:
+    #         print("No files found for pattern:", pattern)
+    #     for i, fpath in enumerate(files[:5]):
+    #         print(f"\n---- File {i+1}: {fpath} ----")
+    #         run_inference_on_file(model, fpath, DEVICE)
+    #
 
-        if not files:
-            print("No files found for pattern:", pattern)
-        for i, fpath in enumerate(files[:5]):
-            print(f"\n---- File {i+1}: {fpath} ----")
-            run_inference_on_file(model, fpath, DEVICE)
+    file_path = "cleaned_scans"
+    files = [file for file in os.listdir(file_path)]
 
+    for file in files:
+        full_path = os.path.join(file_path, file)
+        run_inference_on_file(model, full_path, DEVICE)
 
     # files = sorted(glob.glob(INPUT_GLOB))
     #

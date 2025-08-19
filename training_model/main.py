@@ -2,7 +2,7 @@ import torch
 from train_loader import PointCloudDataset
 from torch_geometric.loader import DataLoader
 from model.GNN_autoencoder_model import GNNAutoencoder
-from fetching_files import ground_points_list, synthetic_points_list, mask_points_list
+from fetching_files import build_pointcloud_lists
 import os
 from loss.inpainting_loss import inpainting_loss
 
@@ -14,10 +14,11 @@ from loss.inpainting_loss import inpainting_loss
 best_loss_file = "best_loss.txt"
 save_path = '../model/gnn_autoencoder.pth'
 
+ground_points_list, synthetic_points_list, mask_points_list = build_pointcloud_lists()
 dataset = PointCloudDataset(ground_points_list, synthetic_points_list, mask_points_list)
 train_loader = DataLoader(dataset, batch_size=1, shuffle=True)
 
-TOTAL_NEW_EPOCHS = 100
+TOTAL_NEW_EPOCHS = 10
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -52,7 +53,7 @@ def main():
     optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
 
     best_loss = fetch_best_loss()
-    loss_threshold = 0.1
+    loss_threshold = 0.01
 
     # ask user if they want to resume training if checkpoint exists
     user_input = input(f"Checkpoint found with best loss {best_loss:.5f}. Resume training? (y/n): ").strip().lower()
@@ -95,7 +96,7 @@ def main():
             best_loss = avg_loss
             save_best_loss(best_loss)
             loss_threshold = avg_loss * 0.1     # MAY NEED TO ADJUST LIL BRO
-            print("New threshold value: ", loss_threshold)
+            print("New threshold value: ", best_loss - loss_threshold)
 
             torch.save({
                 'epoch': epoch + 1,

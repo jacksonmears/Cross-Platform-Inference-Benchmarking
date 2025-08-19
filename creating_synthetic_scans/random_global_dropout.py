@@ -1,11 +1,19 @@
+# random_global_dropout.py
 import numpy as np
 
-def random_global_dropout(points, dropout_ratio=0.1):
+def random_global_dropout(points: np.ndarray, dropout_ratio: float = 0.1, sentinel=1e6):
+    """
+    Mark a random subset of points as dropped (masked) and set a sentinel in synthetic points.
+    Returns (corrupted_points, mask_bool_1d).
+    """
     n_points = len(points)
-    keep_num = int(n_points * (1 - dropout_ratio))
-    keep_indices = np.random.choice(n_points, keep_num, replace=False)
+    drop_num = int(n_points * dropout_ratio)
+    drop_num = max(1, drop_num)
+    drop_indices = np.random.choice(n_points, drop_num, replace=False)
 
-    mask = np.ones(n_points, dtype=bool)
-    mask[keep_indices] = False  # points we keep are not corrupted
+    mask = np.zeros(n_points, dtype=bool)
+    mask[drop_indices] = True
 
-    return points[keep_indices], mask
+    corrupted = points.copy()
+    corrupted[drop_indices] = np.array([sentinel, sentinel, sentinel], dtype=points.dtype)
+    return corrupted, mask

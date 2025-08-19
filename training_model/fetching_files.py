@@ -1,31 +1,40 @@
 import os
 import numpy as np
+import torch
 
+ground_folder = "../ground_truths"
+synthetic_folder = "../synthetic_scans"
+mask_folder = "../masks"
 
 def load_xyz_file(filepath):
     return np.loadtxt(filepath, delimiter=None)
 
+def build_pointcloud_lists():
+    """Returns aligned lists: ground_points_list, synthetic_points_list, mask_points_list"""
+    ground_dict = {os.path.splitext(f)[0]: load_xyz_file(os.path.join(ground_folder, f))
+                   for f in os.listdir(ground_folder) if f.endswith('.xyz')}
 
-ground_truths_folder = "../ground_truths"
-synthetic_folder = "../synthetic_scans"
-mask_folder = "../masks"
+    synthetic_files = sorted([f for f in os.listdir(synthetic_folder) if f.endswith('.xyz')])
+    ground_points_list, synthetic_points_list, mask_points_list = [], [], []
 
-ground_dict = {f: load_xyz_file(os.path.join(ground_truths_folder, f)) for f in os.listdir(ground_truths_folder) if f[-1]=='z'}
+    for syn_file in synthetic_files:
+        base_name = syn_file.split('_')[0]
+        syn_path = os.path.join(synthetic_folder, syn_file)
+        syn_pts = load_xyz_file(syn_path)
+        synthetic_points_list.append(syn_pts)
 
-ground_points_list = []
-synthetic_points_list = []
-mask_points_list = []
-
-for syn_file in os.listdir(synthetic_folder):
-    print(syn_file)
-    base_ground_name = syn_file.split('_')[0]
-
-    if base_ground_name in ground_dict:
-        synthetic_points_list.append(load_xyz_file(os.path.join(synthetic_folder, syn_file)))
-        ground_points_list.append(ground_dict[base_ground_name])
+        gt_pts = ground_dict.get(base_name, syn_pts.copy())
+        ground_points_list.append(gt_pts)
 
         mask_file = os.path.join(mask_folder, syn_file.replace('.xyz', '_mask.npy'))
         if os.path.exists(mask_file):
-            mask_points_list.append(np.load(mask_file))
+            mask = np.load(mask_file)
+            if mask.ndim != 1 or mask.shape[0] != syn_pts.shape[0]:
+                # fallback: zero mask aligned to synthetic points
+                mask = np.zeros(syn_pts.shape[0], dtype=bool)
         else:
-            mask_points_list.append(np.zeros(len(ground_dict[base_ground_name]), dtype=bool))
+            mask = np.zeros(syn_pts.shape[0], dtype=bool)
+        mask_points_list.append(mask.astype(bool))
+
+    assert len(ground_points_list) == len(synthetic_points_list) == len(mask_points_list)
+    return ground_points_list, synthetic_points_list, mask_points_list

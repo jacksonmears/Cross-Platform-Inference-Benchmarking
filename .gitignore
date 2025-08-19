@@ -4,3 +4,5 @@ model_inferencing/inpainting/
 runtime_analysis/
 masks/
 ground_truths/
+model_inferencing/cleaned_scans/
+model_inferencing/raw_scans/
