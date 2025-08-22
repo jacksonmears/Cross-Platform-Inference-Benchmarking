@@ -7,6 +7,7 @@ from random_global_dropout import random_global_dropout
 from random_local_hole import random_local_hole
 from save_utils import save_points_as_xyz, save_mask
 
+
 def generate_synthetic_scans(ground_truth_points: np.ndarray, base_filename: str, corrupt_dir: str, mask_dir: str, number_files: int = 3):
     os.makedirs(corrupt_dir, exist_ok=True)
     os.makedirs(mask_dir, exist_ok=True)
@@ -58,8 +59,8 @@ def process_all_scans(input_folder: str, output_folder: str, masked_folder: str)
 
 
 if __name__ == "__main__":
-    input_folder = "../ground_truths"
-    corrupted_folder = "../synthetic_scans"
-    masked_folder = "../masks"
+    input_folder = "ground_truths"
+    corrupted_folder = "synthetic_scans"
+    masked_folder = "masks"
     process_all_scans(input_folder, corrupted_folder, masked_folder)
     print("All synthetic data saved.")
