@@ -1,10 +1,11 @@
 import os
 import numpy as np
 import torch
+import sys
 
-ground_folder = "../ground_truths"
-synthetic_folder = "../synthetic_scans"
-mask_folder = "../masks"
+ground_folder = "ground_truths"
+synthetic_folder = "synthetic_scans"
+mask_folder = "masks"
 
 def load_xyz_file(filepath):
     return np.loadtxt(filepath, delimiter=None)

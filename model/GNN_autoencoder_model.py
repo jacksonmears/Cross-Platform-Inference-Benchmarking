@@ -1,3 +1,6 @@
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from torch_geometric.nn import EdgeConv, global_max_pool
 from torch import nn
 from training_model.config import NUM_POINTS

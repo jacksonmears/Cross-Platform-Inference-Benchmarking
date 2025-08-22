@@ -1,5 +1,5 @@
 import torch
-from training_model.config import NUM_POINTS
+from config import NUM_POINTS
 
 def fixed_size_points(points: torch.Tensor):
     """Simple down/up sampling to NUM_POINTS"""
