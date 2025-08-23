@@ -84,7 +84,8 @@ def update_losses(avg_loss, best_losses, epoch, model, optimizer):
             best_losses[title] = avg_loss
             save_best_losses(best_losses)
             update_model(epoch, model, optimizer, avg_loss, title)
-            updated = True
+            if title == "strategy":
+                updated = True
 
     return updated
 
@@ -127,6 +128,8 @@ def main():
     if os.path.exists(strategy_path) and user_input == 'y':
         start_epoch = load_checkpoint(model, optimizer, strategy_path)
         best_losses["last_run"] = best_losses["current_run"]
+        update_model(start_epoch, model, optimizer, best_losses["last_run"], "last_run")
+        best_losses["current_run"] = float("inf")
     else:
         print("Either checkpoint wasn't found or user didn't want to resume. Starting training from scratch.")
         best_losses = {
@@ -137,8 +140,9 @@ def main():
         }
         start_epoch = 0
     
-    best_losses["strategy"] *= 1.4      # made the 1.4 up so the model can have an easier time updating strategy for the first time after a new run has begun but gets harder after that with const threshold 
+    best_losses["strategy"] *= 1.6      # made the 1.4 up so the model can have an easier time updating strategy for the first time after a new run has begun but gets harder after that with const threshold 
     save_best_losses(best_losses)
+    
     has_saved = False
     epoch = start_epoch
     total_epochs = start_epoch + TOTAL_NEW_EPOCHS
