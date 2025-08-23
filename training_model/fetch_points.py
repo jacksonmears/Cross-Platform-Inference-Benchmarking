@@ -1,11 +1,16 @@
 import torch
 from config import NUM_POINTS
+import os
+import random
+import string
+
 
 def fixed_size_points(points: torch.Tensor):
-    """Simple down/up sampling to NUM_POINTS"""
+    """Simple down/up sampling to NUM_POINTS with optional index saving"""
     N = points.size(0)
     if N > NUM_POINTS:
         idx = torch.randperm(N)[:NUM_POINTS]
+
         return points[idx]
     elif N < NUM_POINTS:
         pad_size = NUM_POINTS - N

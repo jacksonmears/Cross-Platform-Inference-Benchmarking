@@ -1,9 +1,12 @@
 synthetic_scans/
 model/gnn_autoencoder.pth
-model_inferencing/inpainting/
+model_inferencing/inferences/
 runtime_analysis/
 masks/
 ground_truths/
 model_inferencing/cleaned_scans/
 model_inferencing/raw_scans/
 .venv/
+ground_truths_test/
+synthetic_scans_test/
+masks_test/

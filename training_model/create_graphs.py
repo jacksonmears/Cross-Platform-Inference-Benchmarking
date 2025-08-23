@@ -1,6 +1,6 @@
 from torch_geometric.nn import knn_graph
 from torch_geometric.data import Data
-from config import K
+from training_model.config import K
 
 def create_graph_from_point_cloud(points, k=K):
     """

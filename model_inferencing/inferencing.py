@@ -1,13 +1,16 @@
-import glob
 import os
+import sys
+script_dir = os.path.dirname(os.path.abspath(__file__))
+project_root = os.path.abspath(os.path.join(script_dir, ".."))
+sys.path.append(project_root)
+import glob
 import numpy as np
 import torch
 from training_model.config import K, NUM_POINTS
-
 from training_model.create_graphs import create_graph_from_point_cloud
 from model.GNN_autoencoder_model import GNNAutoencoder
 
-CHECKPOINT = "../model/gnn_autoencoder.pth"
+CHECKPOINT = "model/gnn_autoencoder.pth"
 # INPUT_GLOB = "../synthetic_scans/000006.xyz"
 # INPUT_GLOB_SUFFIX = ["noise", "globaldropout", "localhole", "occlusionplane"]
 # END = "_1.xyz"
@@ -60,7 +63,7 @@ def run_inference_on_file(model, path, device):
     if out_np.ndim == 3:
         out_np = out_np[0]
 
-    output_dir = os.path.join("inpainting")
+    output_dir = os.path.join("model_inferencing\inferences")
     os.makedirs(output_dir, exist_ok=True)
 
     filename = os.path.basename(path)
@@ -85,7 +88,7 @@ if __name__ == "__main__":
     #         run_inference_on_file(model, fpath, DEVICE)
     #
 
-    file_path = "cleaned_scans"
+    file_path = "model_inferencing\cleaned_scans"
     files = [file for file in os.listdir(file_path)]
 
     for file in files:

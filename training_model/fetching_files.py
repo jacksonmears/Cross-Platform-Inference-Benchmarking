@@ -3,9 +3,9 @@ import numpy as np
 import torch
 import sys
 
-ground_folder = "ground_truths"
-synthetic_folder = "synthetic_scans"
-mask_folder = "masks"
+ground_folder = "ground_truths_test"
+synthetic_folder = "synthetic_scans_test"
+mask_folder = "masks_test"
 
 def load_xyz_file(filepath):
     return np.loadtxt(filepath, delimiter=None)
@@ -36,6 +36,7 @@ def build_pointcloud_lists():
         else:
             mask = np.zeros(syn_pts.shape[0], dtype=bool)
         mask_points_list.append(mask.astype(bool))
+        
 
     assert len(ground_points_list) == len(synthetic_points_list) == len(mask_points_list)
     return ground_points_list, synthetic_points_list, mask_points_list

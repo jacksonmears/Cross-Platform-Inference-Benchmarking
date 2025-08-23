@@ -27,7 +27,7 @@ dataset = PointCloudDataset(
     )
 train_loader = DataLoader(dataset, batch_size=1, shuffle=True)
 
-TOTAL_NEW_EPOCHS = 10
+TOTAL_NEW_EPOCHS = 100
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -47,7 +47,7 @@ def save_best_loss(loss):
         file.write(str(loss))
 
 
-def linear_mask_schedule(epoch, max_epoch, start_frac=0.1, end_frac=0.7):
+def linear_mask_schedule(epoch, max_epoch, start_frac=0.1, end_frac=0.7): # originally 0.2 and 0.7
     """
     Returns a mask fraction for the given epoch, linearly increasing from start_frac to end_frac.
     """
@@ -62,7 +62,8 @@ def load_checkpoint(model, optimizer, path):
     model.load_state_dict(checkpoint['model_state_dict'])
     optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
     start_epoch = checkpoint['epoch']
-    best_loss = checkpoint['loss']
+    best_loss = checkpoint['loss']+(checkpoint["loss"])*0.40        # 0.35 chosen semi-randomly (but not arbitrarily) this is purely so that there is a buffer for future models to accept new training data
+                                                                    # if the model must explicity improve every time then there will RARELY be a new model saved because it won't actually improve according to the loss metric
     print(f"Resuming from epoch {start_epoch}, best loss {best_loss:.6f}")
     return start_epoch, best_loss
 
@@ -84,9 +85,14 @@ def main():
         save_best_loss(best_loss)
         start_epoch = 0
 
-    for epoch in range(start_epoch, start_epoch+TOTAL_NEW_EPOCHS):
+    has_saved = False
+    epoch = start_epoch
+    first_check = epoch <= start_epoch+TOTAL_NEW_EPOCHS
+    second_check = epoch <= (start_epoch+TOTAL_NEW_EPOCHS)*10 and not has_saved
+
+    while first_check or second_check:
+    # for epoch in range(start_epoch, start_epoch+TOTAL_NEW_EPOCHS):
         dataset.set_epoch(epoch)
-        print(epoch, dataset.mask_fraction_schedule)
         model.train()
         total_loss = 0
         
@@ -117,6 +123,8 @@ def main():
         if avg_loss < best_loss - loss_threshold:
             best_loss = avg_loss
             save_best_loss(best_loss)
+            has_saved = True
+
             loss_threshold = avg_loss * 0.1     # MAY NEED TO ADJUST LIL BRO
             print("New threshold value: ", best_loss - loss_threshold)
 
@@ -127,6 +135,8 @@ def main():
                 'loss': avg_loss,
             }, save_path)
             print(f"Saved checkpoint to {save_path}")
+
+        epoch += 1
 
 
 if __name__ == "__main__":
