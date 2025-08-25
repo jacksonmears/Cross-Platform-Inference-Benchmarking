@@ -1,11 +1,6 @@
-# add_noise.py
 import numpy as np
 
 def add_noise(points: np.ndarray, noise_std: float = 0.01, mask_ratio: float = 0.1):
-    """
-    Add Gaussian noise only to masked points. Return synthetic points and a 1-D boolean mask
-    aligned to the synthetic point ordering.
-    """
     pts = points.copy()
     N = pts.shape[0]
     mask = np.zeros(N, dtype=bool)

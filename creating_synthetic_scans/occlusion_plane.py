@@ -1,11 +1,7 @@
-# occlusion_plane.py
 import numpy as np
 
 def occlusion_plane(points: np.ndarray, plane_normal=None, plane_point=None, sentinel=1e6):
-    """
-    Mark points behind a random plane as masked and replace them with a sentinel coordinate
-    so they are visibly corrupted in the synthetic cloud.
-    """
+
     if plane_normal is None:
         plane_normal = np.random.randn(3)
         plane_normal /= np.linalg.norm(plane_normal)
@@ -16,6 +12,7 @@ def occlusion_plane(points: np.ndarray, plane_normal=None, plane_point=None, sen
     mask = distances <= 0  # Points behind the plane are masked
 
     corrupted = points.copy()
+    
     # replace masked points with sentinel (so file still has same length)
     corrupted[mask] = np.array([sentinel, sentinel, sentinel], dtype=points.dtype)
 

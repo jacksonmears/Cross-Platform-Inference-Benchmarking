@@ -1,4 +1,3 @@
-# generate_synthetic_scans.py
 import os
 import numpy as np
 from add_noise import add_noise

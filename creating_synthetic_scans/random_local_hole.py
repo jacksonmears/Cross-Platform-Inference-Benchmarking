@@ -1,10 +1,6 @@
-# random_local_hole.py
 import numpy as np
 
 def random_local_hole(points: np.ndarray, num_holes: int = 1, hole_scale_min: float = 0.05, hole_scale_max: float = 0.1, sentinel=1e6):
-    """
-    Create random spherical holes in the pointcloud. Masked points are replaced by sentinel.
-    """
     pts = points.copy()
     N = pts.shape[0]
     mask = np.zeros(N, dtype=bool)
