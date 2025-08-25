@@ -2,10 +2,6 @@ import torch
 from scipy.optimize import linear_sum_assignment
 
 def approximate_emd(pred, gt):
-    """
-    pred, gt: [B, N, 3]
-    returns scalar loss
-    """
     B, N, _ = pred.size()
     total_loss = 0.0
     for b in range(B):

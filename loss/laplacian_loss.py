@@ -2,11 +2,6 @@ import torch
 import torch.nn.functional as F
 
 def laplacian_loss(points, k=8):
-    """
-    points: [B, N, 3]
-    k: number of neighbors
-    Encourages smooth surfaces by penalizing deviation from local mean
-    """
     B, N, _ = points.size()
     total_loss = 0.0
     for b in range(B):

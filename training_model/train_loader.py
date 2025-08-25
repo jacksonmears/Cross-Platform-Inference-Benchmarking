@@ -10,11 +10,9 @@ class PointCloudDataset(Dataset):
         self.mask_points_list = mask_points_list
         self.mask_fraction_schedule = mask_fraction_schedule
 
-        # Track current epoch externally
         self.current_epoch = 0
 
     def set_epoch(self, epoch: int):
-        """Called from training loop to update epoch for curriculum masking."""
         self.current_epoch = epoch
 
     def __len__(self):
@@ -24,7 +22,7 @@ class PointCloudDataset(Dataset):
         input_points = torch.tensor(self.synthetic_points_list[idx], dtype=torch.float)
         mask = torch.tensor(self.mask_points_list[idx], dtype=torch.bool)
 
-        # --- Curriculum masking ---
+        # Curriculum masking
         if self.mask_fraction_schedule is not None:
             frac = self.mask_fraction_schedule(self.current_epoch)
 

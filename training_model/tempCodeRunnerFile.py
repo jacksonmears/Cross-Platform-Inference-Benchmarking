@@ -1,2 +1,0 @@
-
-from fetching_files import build_pointcloud_lists

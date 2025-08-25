@@ -1,12 +1,8 @@
 import torch
 from config import NUM_POINTS
-import os
-import random
-import string
 
 
 def fixed_size_points(points: torch.Tensor):
-    """Simple down/up sampling to NUM_POINTS with optional index saving"""
     N = points.size(0)
     if N > NUM_POINTS:
         idx = torch.randperm(N)[:NUM_POINTS]
@@ -19,17 +15,6 @@ def fixed_size_points(points: torch.Tensor):
     return points
 
 def fixed_size_points_with_mask_torch(points: torch.Tensor, mask: torch.Tensor):
-    """
-    Downsample or pad a point cloud with mask to exactly NUM_POINTS.
-
-    Args:
-        points: Tensor [N, 3]
-        mask: BoolTensor [N], True = masked/corrupted points
-
-    Returns:
-        points_down: Tensor [NUM_POINTS, 3]
-        mask_down: BoolTensor [NUM_POINTS], True where the point was originally masked
-    """
     if not torch.is_tensor(points):
         raise TypeError("points must be a torch.Tensor")
     if not torch.is_tensor(mask):
@@ -74,14 +59,12 @@ def fixed_size_points_with_mask_torch(points: torch.Tensor, mask: torch.Tensor):
             points_down = torch.cat([points_down, pad_point], dim=0)
             mask_down = torch.cat([mask_down, torch.zeros(pad_size, dtype=torch.bool)], dim=0)
 
-    # Final shuffle to remove ordering bias
+    # shuffle to remove ordering bias
     perm_all = torch.randperm(points_down.size(0))
     points_down = points_down[perm_all]
     mask_down = mask_down[perm_all]
 
-    # Safety check
-    assert points_down.size(0) == NUM_POINTS
-    assert mask_down.size(0) == NUM_POINTS
+    assert points_down.size(0) == NUM_POINTS and mask_down.size(0) == NUM_POINTS
 
     return points_down, mask_down
 

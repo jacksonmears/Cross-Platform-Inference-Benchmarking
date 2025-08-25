@@ -1,6 +1,5 @@
 import os
 import numpy as np
-import torch
 import sys
 
 ground_folder = "ground_truths_test"
@@ -11,7 +10,6 @@ def load_xyz_file(filepath):
     return np.loadtxt(filepath, delimiter=None)
 
 def build_pointcloud_lists():
-    """Returns aligned lists: ground_points_list, synthetic_points_list, mask_points_list"""
     ground_dict = {os.path.splitext(f)[0]: load_xyz_file(os.path.join(ground_folder, f))
                    for f in os.listdir(ground_folder) if f.endswith('.xyz')}
 
