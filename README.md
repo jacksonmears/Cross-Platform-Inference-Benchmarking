@@ -1,3 +1,7 @@
+link to lidar scans:
+https://drive.google.com/drive/u/1/folders/1DliNpAwRJkojgTkAah4oK116x1sy3TcZ
+
+
 # Cross-Platform-Inference-Benchmarking
 Evaluating the same LiDAR model inferences across Cloud, Edge, and Mobile devices.
 
