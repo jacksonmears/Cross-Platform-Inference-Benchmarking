@@ -1,8 +1,7 @@
-from loss.chamfer import *
-from loss.masked_chamfer import *
-from loss.laplacian_loss import *
-from scipy.optimize import linear_sum_assignment
-from loss.approximate_emd import *
+from loss.chamfer import chamfer_distance
+from loss.masked_chamfer import masked_chamfer_distance
+from loss.laplacian_loss import laplacian_loss
+from loss.approximate_emd import approximate_emd
 
 def inpainting_loss(pred, gt, mask=None, lambda_cd=1.0, lambda_emd=0.1, lambda_lap=0.01):
 
@@ -13,7 +12,7 @@ def inpainting_loss(pred, gt, mask=None, lambda_cd=1.0, lambda_emd=0.1, lambda_l
 
     loss_lap = laplacian_loss(pred)
 
-    # loss_emd = approximate_emd(pred, gt)                  # Uncomment if N is small or approximate EMD available   # EMD (optional, slow)
-    loss_emd = 0.0
+    # loss_emd = approximate_emd(pred, gt)                    # Uncomment if N is small or approximate EMD available   # EMD (optional, slow, probably never gonna use it until GPU implementation)
+    loss_emd = 0.0                                       # Uncomment if we chose to NOT use loss_emd 
 
     return lambda_cd*loss_cd + lambda_emd*loss_emd + lambda_lap*loss_lap

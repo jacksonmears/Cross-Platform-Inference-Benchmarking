@@ -1,10 +1,11 @@
 import numpy as np
 
-def occlusion_plane(points: np.ndarray, plane_normal=None, plane_point=None, sentinel=1e6):
+def occlusion_plane(points: np.ndarray, plane_normal=None, plane_point=None, sentinel=1e5):
 
     if plane_normal is None:
         plane_normal = np.random.randn(3)
         plane_normal /= np.linalg.norm(plane_normal)
+        
     if plane_point is None:
         plane_point = points[np.random.choice(len(points))]
 

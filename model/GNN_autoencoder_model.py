@@ -1,9 +1,11 @@
 import sys
 import os
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from torch_geometric.nn import EdgeConv, global_max_pool
 from torch import nn
 from training_model.config import NUM_POINTS
+
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 
 class GNNEncoder(nn.Module):
@@ -23,6 +25,7 @@ class GNNEncoder(nn.Module):
 
         x_pool = global_max_pool(x3, batch)
         embedding = self.fc(x_pool)
+
         return embedding
 
 
@@ -39,6 +42,7 @@ class GNNDecoder(nn.Module):
     def forward(self, z):
         out = self.fc(z)
         out = out.view(-1, self.num_points, 3)
+
         return out
 
 
@@ -52,4 +56,5 @@ class GNNAutoencoder(nn.Module):
         x, edge_index, batch = data.x, data.edge_index, data.batch
         z = self.encoder(x, edge_index, batch)
         reconstructed = self.decoder(z)
+        
         return reconstructed

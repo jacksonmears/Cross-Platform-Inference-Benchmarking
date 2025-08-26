@@ -1,6 +1,5 @@
 import os
 import numpy as np
-import sys
 
 ground_folder = "ground_truths_test"
 synthetic_folder = "synthetic_scans_test"
@@ -37,4 +36,5 @@ def build_pointcloud_lists():
         
 
     assert len(ground_points_list) == len(synthetic_points_list) == len(mask_points_list)
+    
     return ground_points_list, synthetic_points_list, mask_points_list

@@ -3,12 +3,15 @@ import sys
 script_dir = os.path.dirname(os.path.abspath(__file__))
 project_root = os.path.abspath(os.path.join(script_dir, ".."))
 sys.path.append(project_root)
+
 import glob
 import numpy as np
 import torch
 from training_model.config import K, NUM_POINTS
 from training_model.create_graphs import create_graph_from_point_cloud
 from model.GNN_autoencoder_model import GNNAutoencoder
+
+
 
 CHECKPOINT = "model/strategy.pth"
 # INPUT_GLOB = "../synthetic_scans/000006.xyz"
@@ -19,34 +22,39 @@ DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
 def load_checkpoint(path, device):
-    ckpt = torch.load(path, map_location=device)
+    checkpoint = torch.load(path, map_location=device)
     model = GNNAutoencoder()
-    model.load_state_dict(ckpt['model_state_dict'])
+    model.load_state_dict(checkpoint['model_state_dict'])
     model.to(device).eval()
-    print("Loaded checkpoint: epoch", ckpt.get('epoch'), "loss", ckpt.get('loss'))
+    print("Loaded checkpoint: epoch", checkpoint.get('epoch'), "loss", checkpoint.get('loss'))
+
     return model
 
 def load_points_np(path):
     pts = np.loadtxt(path, delimiter=None).astype(np.float32)
+
     return pts
 
 def fixed_size_points_np(points, num_points=NUM_POINTS):
     n = points.shape[0]
     if n == num_points:
         return points.copy()
+
     if n > num_points:
         idx = np.random.choice(n, num_points, replace=False)
         return points[idx]
+
     pad = np.repeat(points[-1:], num_points - n, axis=0)
     return np.vstack([points, pad])
 
 def make_data_from_np(points_np):
-    import torch
+
     N = points_np.shape[0]
     k_effective = min(K, max(1, N-1))
     x = torch.from_numpy(points_np).float()
     data = create_graph_from_point_cloud(x, k=k_effective)
     data.batch = torch.zeros(data.x.size(0), dtype=torch.long)
+    
     return data
 
 def save_points_np(path, points_np):
@@ -59,6 +67,7 @@ def run_inference_on_file(model, path, device):
     data = data.to(device)
     with torch.no_grad():
         out = model(data)
+        
     out_np = out.cpu().numpy()
     if out_np.ndim == 3:
         out_np = out_np[0]

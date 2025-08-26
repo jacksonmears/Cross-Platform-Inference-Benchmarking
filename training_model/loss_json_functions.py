@@ -1,8 +1,11 @@
 import os
-import json
-from training_model.model_functions import update_model
 import sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+import json
+from training_model.model_functions import update_model
+
+
 
 best_losses_file = "best_losses.json"
 ALL_TIME_THRESHOLD_CONST = 0.9
@@ -25,7 +28,9 @@ def fetch_best_losses():
             data = json.load(file)
         defaults.update(data)
         print(defaults)
+
         return defaults
+    
     except Exception:
         return defaults
 

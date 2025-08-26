@@ -8,6 +8,7 @@ def load_checkpoint(model, optimizer, path):
     start_epoch = checkpoint['epoch']
     
     print(f"Resuming from epoch {start_epoch}")
+    
     return start_epoch
 
 

@@ -1,6 +1,7 @@
 import torch
 
 def masked_chamfer_distance(pred, gt, mask):
+    
     x = pred.unsqueeze(2)  # [B, N, 1, 3]
     y = gt.unsqueeze(1)  # [B, 1, N, 3]
     distance = torch.norm(x - y, dim=3)  # [B, N, N]

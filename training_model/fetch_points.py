@@ -12,6 +12,7 @@ def fixed_size_points(points: torch.Tensor):
         pad_size = NUM_POINTS - N
         pad = points[-1].unsqueeze(0).repeat(pad_size, 1)
         return torch.cat([points, pad], dim=0)
+    
     return points
 
 def fixed_size_points_with_mask_torch(points: torch.Tensor, mask: torch.Tensor):
@@ -32,16 +33,16 @@ def fixed_size_points_with_mask_torch(points: torch.Tensor, mask: torch.Tensor):
 
     if M >= NUM_POINTS:
         # Only sample from masked points
-        perm = torch.randperm(M)[:NUM_POINTS]
-        points_down = masked_points[perm]
+        random_permutation_masked = torch.randperm(M)[:NUM_POINTS]
+        points_down = masked_points[random_permutation_masked]
         mask_down = torch.ones(NUM_POINTS, dtype=torch.bool)
     else:
         remaining = NUM_POINTS - M
 
         # Sample unmasked points if available
         if unmasked_points.size(0) >= remaining:
-            perm_u = torch.randperm(unmasked_points.size(0))[:remaining]
-            sampled_unmasked = unmasked_points[perm_u]
+            random_permutation_unmasked = torch.randperm(unmasked_points.size(0))[:remaining]
+            sampled_unmasked = unmasked_points[random_permutation_unmasked]
         else:
             sampled_unmasked = unmasked_points
 
@@ -60,9 +61,9 @@ def fixed_size_points_with_mask_torch(points: torch.Tensor, mask: torch.Tensor):
             mask_down = torch.cat([mask_down, torch.zeros(pad_size, dtype=torch.bool)], dim=0)
 
     # shuffle to remove ordering bias
-    perm_all = torch.randperm(points_down.size(0))
-    points_down = points_down[perm_all]
-    mask_down = mask_down[perm_all]
+    permutations = torch.randperm(points_down.size(0))
+    points_down = points_down[permutations]
+    mask_down = mask_down[permutations]
 
     assert points_down.size(0) == NUM_POINTS and mask_down.size(0) == NUM_POINTS
 

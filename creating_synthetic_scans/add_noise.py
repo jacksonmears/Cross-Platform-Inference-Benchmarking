@@ -2,7 +2,7 @@ import numpy as np
 
 def add_noise(points: np.ndarray, noise_std: float = 0.01, mask_ratio: float = 0.1):
     pts = points.copy()
-    N = pts.shape[0]
+    N = pts.shape[0] # NOT THE SAME N FOR MODEL. We're just creating synthetic scans right now and they can be more than NUM_POINTS until input into model for training/inference
     mask = np.zeros(N, dtype=bool)
 
     num_mask = max(1, int(N * mask_ratio))

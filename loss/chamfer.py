@@ -1,6 +1,7 @@
 import torch
 
 def chamfer_distance(points1, points2):
+    
     # points1, points2: [B, N, 3]
     x, y = points1, points2
     x = x.unsqueeze(2)  # [B, N, 1, 3]
@@ -9,4 +10,5 @@ def chamfer_distance(points1, points2):
     min_dist_x, _ = distance.min(dim=2)  # [B, N]
     min_dist_y, _ = distance.min(dim=1)  # [B, M]
     loss = min_dist_x.mean(dim=1) + min_dist_y.mean(dim=1)  # [B]
+
     return loss.mean()  # scalar
