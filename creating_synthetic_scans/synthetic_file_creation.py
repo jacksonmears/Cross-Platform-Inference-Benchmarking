@@ -4,7 +4,7 @@ from add_noise import add_noise
 from occlusion_plane import occlusion_plane
 from random_global_dropout import random_global_dropout
 from random_local_hole import random_local_hole
-from save_utils import save_points_as_xyz, save_mask
+from save_functions import save_points_as_xyz, save_mask
 
 
 def generate_synthetic_scans(ground_truth_points: np.ndarray, base_filename: str, corrupt_dir: str, mask_dir: str, number_files: int = 3):
