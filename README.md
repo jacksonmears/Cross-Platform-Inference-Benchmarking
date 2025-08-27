@@ -15,7 +15,7 @@ This repository contains tools for working with [LiDAR scans](https://drive.goog
 
 ---
 
-## ⚙Setup Instructions
+## Setup Instructions
 
 Clone this repository and install the required dependencies.  
 All commands below should be run from the **project root**:
