@@ -6,6 +6,3 @@ ground_truths/
 model_inferencing/cleaned_scans/
 model_inferencing/raw_scans/
 .venv/
-ground_truths_test/
-synthetic_scans_test/
-masks_test/
