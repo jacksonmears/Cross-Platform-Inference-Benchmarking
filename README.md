@@ -9,6 +9,8 @@ Python 3.12.0
 Python and Code runner Extensions (if you're using vs code)
 
 run in terminal in project root:
+
+
 pip install numpy
 pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
 pip install --no-cache-dir torch-scatter -f https://data.pyg.org/whl/torch-2.8.0+cpu.html
