@@ -3,7 +3,7 @@ from loss.masked_chamfer import masked_chamfer_distance
 from loss.laplacian_loss import laplacian_loss
 from loss.approximate_emd import approximate_emd
 
-def inpainting_loss(pred, gt, mask=None, lambda_cd=1.0, lambda_emd=0.1, lambda_lap=0.01):
+def inpainting_loss(pred, gt, mask=None, lambda_cd=0.75, lambda_emd=0.1, lambda_lap=0.05):
 
     if mask is not None:
         loss_cd = masked_chamfer_distance(pred, gt, mask)

@@ -1,6 +1,6 @@
 import numpy as np
-
-def occlusion_plane(points: np.ndarray, plane_normal=None, plane_point=None, sentinel=1e5):
+from training_model.config import LEARNING_RATE
+def occlusion_plane(points: np.ndarray, plane_normal=None, plane_point=None, sentinel=LEARNING_RATE):
 
     if plane_normal is None:
         plane_normal = np.random.randn(3)

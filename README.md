@@ -21,6 +21,9 @@ Clone this repository and install the required dependencies.
 All commands below should be run from the **project root**:
 
 ```bash
+# Upgrade pip if you need to!
+python.exe -m pip install --upgrade pip
+
 # Install core dependencies
 pip install numpy
 

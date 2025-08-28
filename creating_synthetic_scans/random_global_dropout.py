@@ -1,6 +1,7 @@
 import numpy as np
+from training_model.config import LEARNING_RATE
 
-def random_global_dropout(points: np.ndarray, dropout_ratio: float = 0.1, sentinel=1e6):
+def random_global_dropout(points: np.ndarray, dropout_ratio: float = 0.1, sentinel=LEARNING_RATE):
     n_points = len(points)
     drop_num = int(n_points * dropout_ratio)
     drop_num = max(1, drop_num)
