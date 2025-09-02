@@ -8,7 +8,7 @@ This repository contains tools for working with [LiDAR scans](https://drive.goog
 
 - **VS Code** (or any text editor/IDE of your choice)  
 - **Git**  
-- **Python 3.13.5 and add to $Path**  
+- **Python 3.12.0 and add to $Path**  
 - *(if using VS Code)*  
   - Python extension  
   - Code Runner extension  
