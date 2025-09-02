@@ -55,7 +55,6 @@ python -m pip install scipy
 
 ## Requirements for visualizing model 
 
-- download python 3.12.0 and add to $Path
 - create another repo with new python version in your venv
 - transfer python files from "visualization_exports" to new repo
 - adjust paths from files to your specific paths to ground_truth folders/inference folders/model folders etc
