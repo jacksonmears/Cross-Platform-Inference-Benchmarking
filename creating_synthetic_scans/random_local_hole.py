@@ -1,6 +1,7 @@
 import numpy as np
+from training_model.config import LEARNING_RATE
 
-def random_local_hole(points: np.ndarray, num_holes: int = 1, hole_scale_min: float = 0.05, hole_scale_max: float = 0.1, sentinel=1e5):
+def random_local_hole(points: np.ndarray, num_holes: int = 1, hole_scale_min: float = 0.05, hole_scale_max: float = 0.1, sentinel=LEARNING_RATE):
     pts = points.copy()
     N = pts.shape[0]
     mask = np.zeros(N, dtype=bool)

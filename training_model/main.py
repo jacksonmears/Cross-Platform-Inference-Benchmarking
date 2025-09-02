@@ -10,6 +10,7 @@ from fetching_files import build_pointcloud_lists
 from loss.inpainting_loss import inpainting_loss
 from training_model.loss_json_functions import save_best_losses, fetch_best_losses, update_losses, update_model
 from training_model.model_functions import update_model, load_checkpoint
+from config import LEARNING_RATE
 
 
 
@@ -40,7 +41,7 @@ train_loader = DataLoader(dataset, batch_size=1, shuffle=True)
 
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-def linear_mask_schedule(epoch, max_epoch, start_frac=0.1, end_frac=0.7): # originally 0.2 and 0.7
+def linear_mask_schedule(epoch, max_epoch, start_frac=0.2, end_frac=0.7): # originally 0.2 and 0.7
     if epoch >= max_epoch:
         return end_frac
     return start_frac + (end_frac - start_frac) * (epoch / max_epoch)
@@ -56,7 +57,7 @@ def second_epoch_check(epoch, total_epochs, has_saved_current_run):
 
 def main():
     model = GNNAutoencoder().to(DEVICE)
-    optimizer = torch.optim.Adam(model.parameters(), lr=1e-5)
+    optimizer = torch.optim.Adam(model.parameters(), lr=LEARNING_RATE)
 
     best_losses = fetch_best_losses()
 
@@ -77,7 +78,7 @@ def main():
         }
         start_epoch = 0
     
-    best_losses["strategy"] *= 1.6      # made the 1.4 up so the model can have an easier time updating strategy for the first time after a new run has begun but gets harder after that with const threshold 
+    best_losses["strategy"] *= 1.75      # made the 1.4 up so the model can have an easier time updating strategy for the first time after a new run has begun but gets harder after that with const threshold 
     save_best_losses(best_losses)
     
     has_saved_current_run = False
@@ -104,7 +105,7 @@ def main():
                 mask=mask,
                 lambda_cd=1.0,
                 lambda_emd=0.1,
-                lambda_lap=0.01
+                lambda_lap=0.001
             )
 
             loss.backward()

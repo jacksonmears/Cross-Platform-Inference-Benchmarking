@@ -8,8 +8,19 @@ import glob
 import numpy as np
 import torch
 from training_model.config import K, NUM_POINTS
-from training_model.create_graphs import create_graph_from_point_cloud
 from model.GNN_autoencoder_model import GNNAutoencoder
+from torch_geometric.nn import knn_graph
+from torch_geometric.data import Data
+from training_model.config import K
+
+
+def create_graph_from_point_cloud(points, k=K):
+    
+    edge_index = knn_graph(points, k=k, loop=False)  # [2, num_edges]
+    data = Data(x=points, edge_index=edge_index)
+
+    return data
+
 
 
 

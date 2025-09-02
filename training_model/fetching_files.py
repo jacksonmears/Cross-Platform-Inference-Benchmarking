@@ -1,9 +1,9 @@
 import os
 import numpy as np
 
-ground_folder = "ground_truths_test"
-synthetic_folder = "synthetic_scans_test"
-mask_folder = "masks_test"
+ground_folder = "ground_truths"
+synthetic_folder = "synthetic_scans"
+mask_folder = "masks"
 
 def load_xyz_file(filepath):
     return np.loadtxt(filepath, delimiter=None)

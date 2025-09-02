@@ -4,11 +4,11 @@ This repository contains tools for working with [LiDAR scans](https://drive.goog
 
 ---
 
-## Requirements
+## Requirements for training/Running Inferences with Model
 
 - **VS Code** (or any text editor/IDE of your choice)  
 - **Git**  
-- **Python 3.12.0**  
+- **Python 3.13.5 and add to $Path**  
 - *(if using VS Code)*  
   - Python extension  
   - Code Runner extension  
@@ -21,6 +21,9 @@ Clone this repository and install the required dependencies.
 All commands below should be run from the **project root**:
 
 ```bash
+# Upgrade pip if you need to!
+python.exe -m pip install --upgrade pip
+
 # Install core dependencies
 pip install numpy
 
@@ -48,6 +51,19 @@ python -m pip install scipy
 
 
 ---
+
+
+## Requirements for visualizing model 
+
+- download python 3.12.0 and add to $Path
+- create another repo with new python version in your venv
+- transfer python files from "visualization_exports" to new repo
+- adjust paths from files to your specific paths to ground_truth folders/inference folders/model folders etc
+
+```bash
+pip install numpy
+pip install open3d
+```
 
 
 easier to go through documentation and the repo at the same time. it goes through each file, function, and purpose in a neat order!
